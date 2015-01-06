@@ -1,0 +1,50 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'eu.appsatori:gradle-fatjar-plugin:0.3'
+    }
+}
+
+apply plugin: 'eu.appsatori.fatjar'
+apply plugin: 'groovy'
+apply plugin: 'application'
+apply plugin: 'idea'
+
+mainClassName = 'com.example.helloworld.HelloWorldApplication'
+
+// Use Java 8 by default
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+  maven {
+    url 'http://dl.bintray.com/groovy/maven'
+  }
+  mavenCentral()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.3.8'
+    compile 'io.dropwizard:dropwizard-core:0.7.1'
+
+    // This dependency needed due to http://issues.gradle.org/browse/GRADLE-2647
+    // Found at
+    compile 'com.sun.jersey:jersey-client:1.15'
+
+}
+
+// Configure the fatJar task
+fatJar {
+    classifier 'fat'
+
+    // We need to add the main class to the manifest, otherwise the JAR won't start.
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+
+    // We have to exclude signature files from the fat JAR, otherwise we'll get invalid signature file digest errors.
+    exclude 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/*.SF'
+}
