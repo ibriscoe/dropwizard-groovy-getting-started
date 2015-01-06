@@ -1,7 +1,23 @@
-package com.example.helloworld.health
+package com.example.helloworld.health;
 
-/**
- * Created by ian on 06/01/15.
- */
-class TemplateHealthCheck {
+import com.codahale.metrics.health.HealthCheck;
+
+// Groovy needs this import to avoid compiler error
+import com.codahale.metrics.health.HealthCheck.Result;
+
+public class TemplateHealthCheck extends HealthCheck {
+    private final String template;
+
+    public TemplateHealthCheck(String template) {
+        this.template = template;
+    }
+
+    @Override
+    protected Result check() throws Exception {
+        final String saying = String.format(template, "TEST");
+        if (!saying.contains("TEST")) {
+            return Result.unhealthy("template doesn't include a name");
+        }
+        return Result.healthy();
+    }
 }
