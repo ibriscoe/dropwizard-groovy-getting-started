@@ -1,30 +1,20 @@
-package com.example.helloworld.core;
+package com.example.helloworld.core
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.Length;
+import com.fasterxml.jackson.annotation.JsonProperty
+import groovy.transform.TupleConstructor
+import org.hibernate.validator.constraints.Length
 
-public class Saying {
-    private long id;
+@TupleConstructor
+class Saying {
+
+    @JsonProperty
+    final long id
 
     @Length(max = 3)
-    private String content;
+    @JsonProperty
+    final String content
 
-    public Saying() {
+    Saying() {
         // Jackson deserialization
-    }
-
-    public Saying(long id, String content) {
-        this.id = id;
-        this.content = content;
-    }
-
-    @JsonProperty
-    public long getId() {
-        return id;
-    }
-
-    @JsonProperty
-    public String getContent() {
-        return content;
     }
 }
